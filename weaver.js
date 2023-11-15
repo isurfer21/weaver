@@ -134,6 +134,10 @@ class CreateVideos extends AVEnviron {
   }
 
   initialize(fileConfig) {
+    if (!fileConfig) {
+      console.log('Error: Config file-path is missing');
+      process.exit(1);
+    }
     this.dataConfig = this.loadConfig(fileConfig);
     this.createVideos();
   }
@@ -174,6 +178,9 @@ class UniteVideos extends AVEnviron {
   }
 
   initialize(fileConfig) {
+    if (!fileConfig) {
+      console.log('Warning: Config file-path is missing');
+    }
     if (!!fileConfig) {
       this.fileVideosCatalog = fileConfig;
     }
@@ -225,6 +232,14 @@ class SplitAudio extends AVEnviron {
   }
 
   initialize(fileConfig, fileAudio) {
+    if (!fileConfig) {
+      console.log('Error: Config file-path is missing');
+      process.exit(1);
+    }
+    if (!fileAudio) {
+      console.log('Error: Audio file-path is missing');
+      process.exit(1);
+    }
     this.dataConfig = this.loadConfig(fileConfig);
     this.splitAudio(fileAudio);
   }
@@ -268,6 +283,14 @@ class MergeAV extends AVEnviron {
   }
 
   initialize(fileAudio, fileVideo) {
+    if (!fileAudio) {
+      console.log('Error: Audio file-path is missing');
+      process.exit(1);
+    }
+    if (!fileVideo) {
+      console.log('Error: Video file-path is missing');
+      process.exit(1);
+    }
     this.mergeAV(fileAudio, fileVideo);
   }
 
@@ -331,6 +354,18 @@ class RemoveSegment extends AVEnviron {
   }
 
   initialize(fileVideo, tsSegmentBegin, tsSegmentEnd) {
+    if (!fileVideo) {
+      console.log('Error: Video file-path is missing');
+      process.exit(1);
+    }
+    if (!tsSegmentBegin) {
+      console.log('Error: Video segment begin timestamp is missing');
+      process.exit(1);
+    }
+    if (!tsSegmentEnd) {
+      console.log('Error: Video segment end timestamp is missing');
+      process.exit(1);
+    }
     this.removeSegment(fileVideo, tsSegmentBegin, tsSegmentEnd);
   }
   
@@ -375,6 +410,14 @@ class RemoveSegments extends RemoveSegment {
   }
 
   initialize(fileConfig, fileVideo) {
+    if (!fileConfig) {
+      console.log('Error: Config file-path is missing');
+      process.exit(1);
+    }
+    if (!fileVideo) {
+      console.log('Error: Video file-path is missing');
+      process.exit(1);
+    }
     this.dataConfig = this.loadConfig(fileConfig);
     this.removeSegments(fileVideo);
   }
@@ -425,6 +468,10 @@ class SelfTest extends AVEnviron {
   }
 
   initialize(fileConfig) {
+    if (!fileConfig) {
+      console.log('Error: Config file-path is missing');
+      process.exit(1);
+    }
     this.fileConfig = fileConfig;
     
     console.log('AVEnviron');
