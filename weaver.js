@@ -523,7 +523,7 @@ Examples:
           if (this.argv.h || this.argv.help) {
             createVideos.printHelp();
           } else {
-            const fileConfig = this.argv.c || this.argv.config || SLIDES_FILENAME;
+            const fileConfig = this.argv.c || this.argv.config;
             createVideos.initialize(fileConfig);
           }
           break;
@@ -532,7 +532,7 @@ Examples:
           if (this.argv.h || this.argv.help) {
             uniteVideos.printHelp();
           } else {
-            const fileConfig = this.argv.c || this.argv.config || VIDEOS_FILENAME;
+            const fileConfig = this.argv.c || this.argv.config;
             uniteVideos.initialize(fileConfig)
           }
           break;
@@ -541,8 +541,8 @@ Examples:
           if (this.argv.h || this.argv.help) {
             splitAudio.printHelp();
           } else {
-            const fileConfig = this.argv.c || this.argv.config || SLIDES_FILENAME;
-            const fileAudio = this.argv.a || this.argv.audio || AUDIO_FILENAME;
+            const fileConfig = this.argv.c || this.argv.config;
+            const fileAudio = this.argv.a || this.argv.audio;
             splitAudio.initialize(fileConfig, fileAudio);
           }
           break;
@@ -551,8 +551,8 @@ Examples:
           if (this.argv.h || this.argv.help) {
             this.printHelp();
           } else {
-            const fileAudio = this.argv.a || this.argv.audio || AUDIO_FILENAME;
-            const fileVideo = this.argv.v || this.argv.video || VIDEO_FILENAME;
+            const fileAudio = this.argv.a || this.argv.audio;
+            const fileVideo = this.argv.v || this.argv.video;
             mergeAV.initialize(fileAudio, fileVideo);
           }
           break;
@@ -561,7 +561,7 @@ Examples:
           if (this.argv.h || this.argv.help) {
             this.printHelp();
           } else {
-            const fileVideo = this.argv.v || this.argv.video || VIDEO_FILENAME;
+            const fileVideo = this.argv.v || this.argv.video;
             const beginSegment = this.argv.b || this.argv.begin;
             const endSegment = this.argv.e || this.argv.end;
             removeSegment.initialize(fileVideo, beginSegment, endSegment);
@@ -572,8 +572,8 @@ Examples:
           if (this.argv.h || this.argv.help) {
             this.printHelp();
           } else {
-            const fileConfig = this.argv.c || this.argv.config || SEGMENT_FILENAME;
-            const fileVideo = this.argv.v || this.argv.video || VIDEO_FILENAME;
+            const fileConfig = this.argv.c || this.argv.config;
+            const fileVideo = this.argv.v || this.argv.video;
             removeSegments.initialize(fileConfig, fileVideo);
           }
           break;
@@ -582,7 +582,7 @@ Examples:
           if (this.argv.h || this.argv.help) {
             selfTest.printHelp();
           } else {
-            const fileConfig = this.argv.c || this.argv.config || SLIDES_FILENAME;
+            const fileConfig = this.argv.c || this.argv.config;
             selfTest.initialize(fileConfig);
           }
           break;
