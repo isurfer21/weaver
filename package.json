@@ -1,0 +1,24 @@
+{
+  "name": "weaver",
+  "version": "1.0.0",
+  "description": "A CLI tool to create video from slides by merging audio, remove segments from audio/video, split/unite audio and video, etc.",
+  "main": "weaver.js",
+  "scripts": {
+    "start": "node weaver.js",
+    "test": "node weaver.js self-test"
+  },
+  "keywords": ["cli", "tool", "editor", "audio", "video", "slide", "convertor", "splitter", "clipper"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isurfer21/weaver.git"
+  },
+  "author": "Abhishek Kumar <akbittu@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/isurfer21/weaver/issues"
+  },
+  "homepage": "https://github.com/isurfer21/weaver#readme",
+  "license": "GPL-3.0",
+  "bin": {
+    "weaver": "weaver.js"
+  }
+}
