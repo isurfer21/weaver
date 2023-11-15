@@ -345,11 +345,7 @@ class RemoveSegment extends AVEnviron {
     const commandArgs = [
       '-i', fileVideo,
       '-filter_complex',
-      `"[0:v]trim=start=${segmentBefore.begin}:end=${segmentBefore.end},setpts=PTS-STARTPTS[v1];`,
-      `[0:v]trim=start=${segmentAfter.begin}:end=${segmentAfter.end},setpts=PTS-STARTPTS[v2];`,
-      `[0:a]atrim=start=${segmentBefore.begin}:end=${segmentBefore.end},asetpts=PTS-STARTPTS[a1];`,
-      `[0:a]atrim=start=${segmentAfter.begin}:end=${segmentAfter.end},asetpts=PTS-STARTPTS[a2];`,
-      `[v1][a1][v2][a2]concat=n=2:v=1:a=1[out]"`,
+      `[0:v]trim=start=${segmentBefore.begin}:end=${segmentBefore.end},setpts=PTS-STARTPTS[v1]; [0:v]trim=start=${segmentAfter.begin}:end=${segmentAfter.end},setpts=PTS-STARTPTS[v2]; [0:a]atrim=start=${segmentBefore.begin}:end=${segmentBefore.end},asetpts=PTS-STARTPTS[a1]; [0:a]atrim=start=${segmentAfter.begin}:end=${segmentAfter.end},asetpts=PTS-STARTPTS[a2]; [v1][a1][v2][a2]concat=n=2:v=1:a=1[out]`,
       '-map', '[out]',
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
