@@ -387,13 +387,13 @@ Examples:
   }
 }
 
-class RemoveSegments extends RemoveSegment {
+class ClipSegments extends AVEnviron {
   constructor() {
     super();
     this.createTempDir();
   }
 
-  removeSegments(fileVideo) {
+  clipSegments(fileVideo) {
     let betweenChunks = [];
     for (const { begin, end } of this.dataConfig) {
       betweenChunks.push(`between(t,${begin},${end})`)
@@ -401,8 +401,8 @@ class RemoveSegments extends RemoveSegment {
     const selectQuery = betweenChunks.join('+');
     const commandArgs = [
       '-i', fileVideo,
-      '-vf', `"select='${selectQuery}',setpts=N/FRAME_RATE/TB"`,
-      '-af', `"aselect='${selectQuery}',asetpts=N/SR/TB"`,
+      '-vf', `select='${selectQuery}',setpts=N/FRAME_RATE/TB`,
+      '-af', `aselect='${selectQuery}',asetpts=N/SR/TB`,
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
     spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
@@ -418,7 +418,7 @@ class RemoveSegments extends RemoveSegment {
       process.exit(1);
     }
     this.dataConfig = this.loadConfig(fileConfig);
-    this.removeSegments(fileVideo);
+    this.clipSegments(fileVideo);
   }
 
   printHelp() {
@@ -429,12 +429,12 @@ Options:
   -v --video=MP4       provide raw video file
 
 Usages:
-  $ node weaver.js remove-segments (-h|--help)
-  $ node weaver.js remove-segments -c=CSV -v=MP4
+  $ node weaver.js clip-segments (-h|--help)
+  $ node weaver.js clip-segments -c=CSV -v=MP4
 
 Examples:
-  $ node weaver.js remove-segments -h
-  $ node weaver.js remove-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
+  $ node weaver.js clip-segments -h
+  $ node weaver.js clip-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
     `);
   }
 }
@@ -529,7 +529,7 @@ Commands:
   split-audio        split audio into chunks
   merge-av           merge audio into video
   remove-segment     remove segment from video
-  remove-segments    remove segments from video
+  clip-segments      remove segments from video
 
 Troubleshoot:
   self-test          self-test built-in methods
@@ -546,7 +546,7 @@ Examples:
   $ node weaver.js split-audio --help
   $ node weaver.js merge-av --help
   $ node weaver.js remove-segment --help
-  $ node weaver.js remove-segments --help
+  $ node weaver.js clip-segments --help
   $ node weaver.js self-test --help
     `);
   }
@@ -615,14 +615,14 @@ Examples:
             removeSegment.initialize(fileVideo, beginSegment, endSegment);
           }
           break;
-        case 'remove-segments':
-          const removeSegments = new RemoveSegments();
+        case 'clip-segments':
+          const clipSegments = new ClipSegments();
           if (this.argv.h || this.argv.help) {
-            removeSegments.printHelp();
+            clipSegments.printHelp();
           } else {
             const fileConfig = this.argv.c || this.argv.config;
             const fileVideo = this.argv.v || this.argv.video;
-            removeSegments.initialize(fileConfig, fileVideo);
+            clipSegments.initialize(fileConfig, fileVideo);
           }
           break;
         case 'self-test':
