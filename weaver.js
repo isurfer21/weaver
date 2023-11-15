@@ -321,12 +321,15 @@ class RemoveSegment extends AVEnviron {
   probeDuration(fileVideo) {
     const commandArgs = [
       '-i', fileVideo, 
-      '-v', 'quiet', 
-      '-show_entries', 'format=duration'
+      '-v', 'error', 
+      '-show_entries', 
+      'format=duration',
+      '-of', 
+      'json'
     ];
-    const child = spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
-    const stdout = child.stdout.split('\n');
-    const duration = stdout[1].split('=')[1];
+    const child = spawnSync('ffprobe', commandArgs);
+    const stdout = child.stdout.toString();
+    const duration = JSON.parse(stdout)?.format?.duration;
     return duration;
   }
 
@@ -337,7 +340,7 @@ class RemoveSegment extends AVEnviron {
     };
     const segmentAfter = {
       begin: tsSegmentEnd,
-      end: probeDuration(fileVideo)
+      end: this.probeDuration(fileVideo)
     };
     const commandArgs = [
       '-i', fileVideo,
