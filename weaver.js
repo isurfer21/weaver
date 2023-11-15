@@ -379,7 +379,7 @@ class RemoveSegments extends RemoveSegment {
     this.removeSegments(fileVideo);
   }
 
-  printHelp_RemoveSegments() {
+  printHelp() {
     console.log(`
 Options:
   -h --help            display help menu
@@ -481,7 +481,7 @@ Commands:
   create-videos      create video chunks from image and audio
   unite-videos       unite video chunks
   split-audio        split audio into chunks
-  merge-audio        merge audio into video
+  merge-av           merge audio into video
   remove-segment     remove segment from video
   remove-segments    remove segments from video
 
@@ -498,7 +498,7 @@ Examples:
   $ node weaver.js create-videos --help
   $ node weaver.js unite-videos --help
   $ node weaver.js split-audio --help
-  $ node weaver.js merge-audio --help
+  $ node weaver.js merge-av --help
   $ node weaver.js remove-segment --help
   $ node weaver.js remove-segments --help
   $ node weaver.js self-test --help
@@ -551,7 +551,7 @@ Examples:
         case 'merge-av':
           const mergeAV = new MergeAV();
           if (this.argv.h || this.argv.help) {
-            this.printHelp();
+            mergeAV.printHelp();
           } else {
             const fileAudio = this.argv.a || this.argv.audio;
             const fileVideo = this.argv.v || this.argv.video;
@@ -561,7 +561,7 @@ Examples:
         case 'remove-segment':
           const removeSegment = new RemoveSegment();
           if (this.argv.h || this.argv.help) {
-            this.printHelp();
+            removeSegment.printHelp();
           } else {
             const fileVideo = this.argv.v || this.argv.video;
             const beginSegment = this.argv.b || this.argv.begin;
@@ -572,7 +572,7 @@ Examples:
         case 'remove-segments':
           const removeSegments = new RemoveSegments();
           if (this.argv.h || this.argv.help) {
-            this.printHelp();
+            removeSegments.printHelp();
           } else {
             const fileConfig = this.argv.c || this.argv.config;
             const fileVideo = this.argv.v || this.argv.video;
