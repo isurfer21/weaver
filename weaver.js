@@ -171,7 +171,10 @@ class UniteVideos extends AVEnviron {
     spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
   }
 
-  initialize() {
+  initialize(fileConfig) {
+    if (!!fileConfig) {
+      this.fileVideosCatalog = fileConfig;
+    }
     this.uniteVideos();
   }
 
