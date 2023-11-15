@@ -128,7 +128,7 @@ class CreateVideos extends AVEnviron {
       spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
     }
 
-    fs.writeFileSync(this.fileVideosCatalog, videos.map(fileVideo => `file '${fileVideo}'`).join('\n'));
+    fs.writeFileSync(this.fileVideosCatalog, videos.map(fileVideo => `file '${path.basename(fileVideo)}'`).join('\n'));
   }
 
   initialize(fileConfig) {
