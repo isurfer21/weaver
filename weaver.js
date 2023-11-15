@@ -203,18 +203,23 @@ class SplitAudio extends AVEnviron {
   }
 
   splitAudio(fileAudio) {
-    let timestamps = this.dataConfig.map(({ timestamp }) => timestamp).join(',');
+    let timestamps = this.dataConfig.map(({ timestamp }) => timestamp);
+    
+    if (timestamps.length < 2) {
+      throw Error('There should be atleast 2 or more timestamps.');
+      process.exit(1);
+    }
 
-    let commandArgs = [
-      '-i', fileAudio,
-      '-f', 'segment',
-      '-segment_times', timestamps,
-      '-c', 'copy',
-      '-ac', '2',
-      path.join(this.dirTemp, `aud-%3d.m4a`)
-    ];
-
-    spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
+    for (let i = 0; i < timestamps.length; i++) {
+      let commandArgs = [
+        '-i', fileAudio,
+        '-ss', timestamps[i-1] || 0,
+        '-to', timestamps[i],
+        '-c', 'copy',
+        path.join(this.dirTemp, `aud-${i+1}.m4a`)
+      ];
+      spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
+    }
   }
 
   initialize(fileConfig, fileAudio) {
