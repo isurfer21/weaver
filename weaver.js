@@ -670,6 +670,7 @@ Options:
   -c --clean         clean up temporary directory 
 
 Commands:
+  create-video       create video from image and audio
   create-videos      create video chunks from image and audio
   unite-videos       unite video chunks
   split-audio        split audio into chunks
@@ -688,6 +689,7 @@ Usages:
 Examples:
   $ weaver --help
   $ weaver --clean
+  $ weaver create-video --help
   $ weaver create-videos --help
   $ weaver unite-videos --help
   $ weaver split-audio --help
@@ -725,7 +727,7 @@ Examples:
             createVideo.initialize(fileSlide, fileAudio, timespan);
           }
           break;
-        case 'create-video':
+        case 'create-videos':
           const createVideos = new CreateVideos();
           if (this.argv.h || this.argv.help) {
             createVideos.printHelp();
