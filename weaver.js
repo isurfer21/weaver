@@ -93,6 +93,94 @@ class AVEnviron {
   }
 }
 
+class CreateVideo extends AVEnviron {
+  constructor() {
+    super();
+    this.createTempDir();
+  }
+
+  createVideo(fileSlide, fileAudio, timespan) {
+    const fileVideo = path.join(this.dirTemp, OUTPUT_FILENAME);
+    let commandArgs = [];
+
+    if (fileAudio) {
+      const duration = timespan || this.probeDuration(fileAudio);
+      commandArgs = [
+        '-i', fileAudio,
+        '-loop', '1',
+        '-i', fileSlide,
+        '-t', duration,
+        '-c:v', 'libx264',
+        '-tune', 'stillimage',
+        '-pix_fmt', 'yuv420p',
+        '-vb', '2000k',
+        '-r', '25',
+        '-f', 'mp4',
+        '-ac', '2',
+        '-ar', '44100',
+        '-c:a', 'copy',
+        '-b:a', '192k',
+        '-shortest',
+        fileVideo
+      ];
+    } else {
+      commandArgs = [
+        '-loop', '1',
+        '-i', fileSlide,
+        '-t', timespan,
+        '-c:v', 'libx264',
+        '-tune', 'stillimage',
+        '-pix_fmt', 'yuv420p',
+        '-vb', '2000k',
+        '-r', '25',
+        '-f', 'mp4',
+        '-c:a', 'copy',
+        fileVideo
+      ];
+    }
+
+    spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
+  }
+
+  initialize(fileSlide, fileAudio, timespan) {
+    if (!fileSlide) {
+      console.log('Error: Slide image file-path is missing');
+      process.exit(1);
+    }
+    if (!fileAudio && !timespan) {
+      console.log('Error: Neither timespan of video nor audio is provided');
+      process.exit(1);
+    }
+    if (fileAudio && !timespan) {
+      console.log('Warning: Timespan is missing thus audio duration is considered as default timespan');
+    }
+    if (!fileAudio && timespan) {
+      console.log('Warning: Audio file-path is missing thus video would be mute');
+    }
+    this.createVideo(fileSlide, fileAudio, timespan);
+  }
+
+  printHelp() {
+    console.log(`
+Options:
+-h --help            display help menu
+-s --slide=PNG       provide slide image file
+-a --audio=M4A       provide audio file
+-t --timespan=NUM    provide video file
+
+Usages:
+$ node weaver.js create-video (-h|--help)
+$ node weaver.js create-video -s=PNG -a=M4A (-t=NUM)
+
+Examples:
+$ node weaver.js create-video -h
+$ node weaver.js create-video -s=slide.png -a=${AUDIOS_FILENAME}
+$ node weaver.js create-video -s=slide.png -a=${AUDIOS_FILENAME} -t=400
+$ node weaver.js create-video -s=slide.png -t=400
+    `);
+  }
+}
+
 class CreateVideos extends AVEnviron {
   constructor() {
     super();
@@ -180,7 +268,7 @@ class UniteVideos extends AVEnviron {
     this.createTempDir();
     this.fileVideosCatalog = path.join(this.dirTemp, VIDEOS_FILENAME);
   }
-  
+
   uniteVideos() {
     const commandArgs = [
       '-f', 'concat',
@@ -228,7 +316,7 @@ class SplitAudio extends AVEnviron {
 
   splitAudio(fileAudio) {
     let timestamps = this.dataConfig.map(({ timestamp }) => timestamp);
-    
+
     if (timestamps.length < 2) {
       throw Error('There should be atleast 2 or more timestamps.');
       process.exit(1);
@@ -237,10 +325,10 @@ class SplitAudio extends AVEnviron {
     for (let i = 0; i < timestamps.length; i++) {
       let commandArgs = [
         '-i', fileAudio,
-        '-ss', timestamps[i-1] || 0,
+        '-ss', timestamps[i - 1] || 0,
         '-to', timestamps[i],
         '-c', 'copy',
-        path.join(this.dirTemp, `aud-${i+1}.m4a`)
+        path.join(this.dirTemp, `aud-${i + 1}.m4a`)
       ];
       spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
     }
@@ -313,8 +401,8 @@ class MergeAV extends AVEnviron {
     console.log(`
 Options:
   -h --help          display help menu
-  -a --audio=M4A    provide raw audio file
-  -v --video=MP4    provide raw video file
+  -a --audio=M4A     provide raw audio file
+  -v --video=MP4     provide raw video file
 
 Usages:
   $ node weaver.js merge-av (-h|--help)
@@ -367,7 +455,7 @@ class RemoveSegment extends AVEnviron {
     }
     this.removeSegment(fileVideo, tsSegmentBegin, tsSegmentEnd);
   }
-  
+
   printHelp() {
     console.log(`
 Options:
@@ -383,6 +471,64 @@ Usages:
 Examples:
   $ node weaver.js remove-segment -h
   $ node weaver.js remove-segment -v=${VIDEO_FILENAME} -b=100 -e=200
+    `);
+  }
+}
+
+class RemoveSegments extends AVEnviron {
+  constructor() {
+    super();
+    this.createTempDir();
+  }
+
+  removeSegments(fileVideo) {
+    let betweenChunks = [],
+      duration = this.probeDuration(fileVideo);
+
+    for (let i = 0; i < this.dataConfig.length; i++) {
+      const begin = (i > 0) ? Number(this.dataConfig[i - 1]?.end) + 0.9 : 0,
+        end = (i < this.dataConfig.length - 1) ? Number(this.dataConfig[i]?.begin - 0.1) : duration;
+      betweenChunks.push(`between(t,${begin},${end})`)
+    }
+
+    const selectQuery = betweenChunks.join('+');
+    const commandArgs = [
+      '-i', fileVideo,
+      '-vf', `select='${selectQuery}',setpts=N/FRAME_RATE/TB`,
+      '-af', `aselect='${selectQuery}',asetpts=N/SR/TB`,
+      path.join(this.dirTemp, OUTPUT_FILENAME)
+    ];
+
+    // spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
+  }
+
+  initialize(fileConfig, fileVideo) {
+    if (!fileConfig) {
+      console.log('Error: Config file-path is missing');
+      process.exit(1);
+    }
+    if (!fileVideo) {
+      console.log('Error: Video file-path is missing');
+      process.exit(1);
+    }
+    this.dataConfig = this.loadConfig(fileConfig);
+    this.removeSegments(fileVideo);
+  }
+
+  printHelp() {
+    console.log(`
+Options:
+  -h --help            display help menu
+  -c --config=CSV      provide configuration file
+  -v --video=MP4       provide raw video file
+
+Usages:
+  $ node weaver.js remove-segments (-h|--help)
+  $ node weaver.js remove-segments -c=CSV -v=MP4
+
+Examples:
+  $ node weaver.js remove-segments -h
+  $ node weaver.js remove-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
     `);
   }
 }
@@ -472,7 +618,7 @@ class SelfTest extends AVEnviron {
       process.exit(1);
     }
     this.fileConfig = fileConfig;
-    
+
     console.log('AVEnviron');
     !this.isAbort && this.test__AVEnviron_createTempDir();
     !this.isAbort && this.test__AVEnviron_loadConfig();
@@ -529,7 +675,8 @@ Commands:
   split-audio        split audio into chunks
   merge-av           merge audio into video
   remove-segment     remove segment from video
-  clip-segments      remove segments from video
+  remove-segments    remove segments from video
+  clip-segments      clip segments from video
 
 Troubleshoot:
   self-test          self-test built-in methods
@@ -546,6 +693,7 @@ Examples:
   $ node weaver.js split-audio --help
   $ node weaver.js merge-av --help
   $ node weaver.js remove-segment --help
+  $ node weaver.js remove-segments --help
   $ node weaver.js clip-segments --help
   $ node weaver.js self-test --help
     `);
@@ -566,7 +714,18 @@ Examples:
     } else {
       const command = this.argv._[0];
       switch (command) {
-        case 'create-videos':
+        case 'create-video':
+          const createVideo = new CreateVideo();
+          if (this.argv.h || this.argv.help) {
+            createVideo.printHelp();
+          } else {
+            const fileSlide = this.argv.s || this.argv.slide;
+            const fileAudio = this.argv.a || this.argv.audio;
+            const timespan = this.argv.t || this.argv.timespan;
+            createVideo.initialize(fileSlide, fileAudio, timespan);
+          }
+          break;
+        case 'create-video':
           const createVideos = new CreateVideos();
           if (this.argv.h || this.argv.help) {
             createVideos.printHelp();
@@ -613,6 +772,16 @@ Examples:
             const beginSegment = this.argv.b || this.argv.begin;
             const endSegment = this.argv.e || this.argv.end;
             removeSegment.initialize(fileVideo, beginSegment, endSegment);
+          }
+          break;
+        case 'remove-segments':
+          const removeSegments = new RemoveSegments();
+          if (this.argv.h || this.argv.help) {
+            removeSegments.printHelp();
+          } else {
+            const fileConfig = this.argv.c || this.argv.config;
+            const fileVideo = this.argv.v || this.argv.video;
+            removeSegments.initialize(fileConfig, fileVideo);
           }
           break;
         case 'clip-segments':
