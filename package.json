@@ -1,5 +1,5 @@
 {
-  "name": "weaver",
+  "name": "weaver-avi",
   "version": "1.0.0",
   "description": "A CLI tool to create video from slides by merging audio, remove segments from audio/video, split/unite audio and video, etc.",
   "main": "weaver.js",

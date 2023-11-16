@@ -7,7 +7,7 @@ Weaver is a command-line tool that allows you to manipulate video and audio file
 To install Weaver, you need to have [node.js](https://nodejs.org/) installed on your system. Then, you can run the following command:
 
 ```bash
-npm install weaver
+npm install weaver-avi
 ```
 
 ## Usage
