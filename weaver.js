@@ -76,6 +76,21 @@ class AVEnviron {
     const config = Sifter.toObjectList(columns, rows);
     return config;
   }
+
+  probeDuration(fileVideo) {
+    const commandArgs = [
+      '-i', fileVideo,
+      '-v', 'error',
+      '-show_entries',
+      'format=duration',
+      '-of',
+      'json'
+    ];
+    const child = spawnSync('ffprobe', commandArgs);
+    const stdout = child.stdout.toString();
+    const duration = JSON.parse(stdout)?.format?.duration;
+    return Number(duration);
+  }
 }
 
 class CreateVideos extends AVEnviron {
@@ -316,21 +331,6 @@ class RemoveSegment extends AVEnviron {
   constructor() {
     super();
     this.createTempDir();
-  }
-
-  probeDuration(fileVideo) {
-    const commandArgs = [
-      '-i', fileVideo, 
-      '-v', 'error', 
-      '-show_entries', 
-      'format=duration',
-      '-of', 
-      'json'
-    ];
-    const child = spawnSync('ffprobe', commandArgs);
-    const stdout = child.stdout.toString();
-    const duration = JSON.parse(stdout)?.format?.duration;
-    return duration;
   }
 
   removeSegment(fileVideo, tsSegmentBegin, tsSegmentEnd) {
