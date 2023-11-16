@@ -169,14 +169,14 @@ Options:
 -t --timespan=NUM    provide video file
 
 Usages:
-$ node weaver.js create-video (-h|--help)
-$ node weaver.js create-video -s=PNG -a=M4A (-t=NUM)
+$ weaver create-video (-h|--help)
+$ weaver create-video -s=PNG -a=M4A (-t=NUM)
 
 Examples:
-$ node weaver.js create-video -h
-$ node weaver.js create-video -s=slide.png -a=${AUDIOS_FILENAME}
-$ node weaver.js create-video -s=slide.png -a=${AUDIOS_FILENAME} -t=400
-$ node weaver.js create-video -s=slide.png -t=400
+$ weaver create-video -h
+$ weaver create-video -s=slide.png -a=${AUDIOS_FILENAME}
+$ weaver create-video -s=slide.png -a=${AUDIOS_FILENAME} -t=400
+$ weaver create-video -s=slide.png -t=400
     `);
   }
 }
@@ -252,12 +252,12 @@ Options:
 -c --config=CSV    provide configuration file
 
 Usages:
-$ node weaver.js create-videos (-h|--help)
-$ node weaver.js create-videos -c=CSV
+$ weaver create-videos (-h|--help)
+$ weaver create-videos -c=CSV
 
 Examples:
-$ node weaver.js create-videos -h
-$ node weaver.js create-videos -c=${SLIDES_FILENAME}
+$ weaver create-videos -h
+$ weaver create-videos -c=${SLIDES_FILENAME}
     `);
   }
 }
@@ -297,12 +297,12 @@ Options:
   -c --config=TXT    provide configuration file
 
 Usages:
-  $ node weaver.js unite-videos (-h|--help)
-  $ node weaver.js unite-videos -c=TXT
+  $ weaver unite-videos (-h|--help)
+  $ weaver unite-videos -c=TXT
 
 Examples:
-  $ node weaver.js unite-videos -h
-  $ node weaver.js unite-videos -c=${VIDEOS_FILENAME}
+  $ weaver unite-videos -h
+  $ weaver unite-videos -c=${VIDEOS_FILENAME}
     `);
   }
 }
@@ -355,12 +355,12 @@ Options:
   -a --audio=M4A    provide raw audio file
 
 Usages:
-  $ node weaver.js split-audio (-h|--help)
-  $ node weaver.js split-audio -c=CSV
+  $ weaver split-audio (-h|--help)
+  $ weaver split-audio -c=CSV
 
 Examples:
-  $ node weaver.js split-audio -h
-  $ node weaver.js split-audio -c=chunks.csv -a=audio.m4a
+  $ weaver split-audio -h
+  $ weaver split-audio -c=chunks.csv -a=audio.m4a
     `);
   }
 }
@@ -405,12 +405,12 @@ Options:
   -v --video=MP4     provide raw video file
 
 Usages:
-  $ node weaver.js merge-av (-h|--help)
-  $ node weaver.js merge-av -c=CSV
+  $ weaver merge-av (-h|--help)
+  $ weaver merge-av -c=CSV
 
 Examples:
-  $ node weaver.js merge-av -h
-  $ node weaver.js merge-av -a=${AUDIO_FILENAME} -v=${VIDEO_FILENAME}
+  $ weaver merge-av -h
+  $ weaver merge-av -a=${AUDIO_FILENAME} -v=${VIDEO_FILENAME}
     `);
   }
 }
@@ -465,12 +465,12 @@ Options:
   -e --end=SEC         provide end time of segment
 
 Usages:
-  $ node weaver.js remove-segment (-h|--help)
-  $ node weaver.js remove-segment -v=MP4 -b=SEC -e=SEC
+  $ weaver remove-segment (-h|--help)
+  $ weaver remove-segment -v=MP4 -b=SEC -e=SEC
 
 Examples:
-  $ node weaver.js remove-segment -h
-  $ node weaver.js remove-segment -v=${VIDEO_FILENAME} -b=100 -e=200
+  $ weaver remove-segment -h
+  $ weaver remove-segment -v=${VIDEO_FILENAME} -b=100 -e=200
     `);
   }
 }
@@ -523,12 +523,12 @@ Options:
   -v --video=MP4       provide raw video file
 
 Usages:
-  $ node weaver.js remove-segments (-h|--help)
-  $ node weaver.js remove-segments -c=CSV -v=MP4
+  $ weaver remove-segments (-h|--help)
+  $ weaver remove-segments -c=CSV -v=MP4
 
 Examples:
-  $ node weaver.js remove-segments -h
-  $ node weaver.js remove-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
+  $ weaver remove-segments -h
+  $ weaver remove-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
     `);
   }
 }
@@ -575,12 +575,12 @@ Options:
   -v --video=MP4       provide raw video file
 
 Usages:
-  $ node weaver.js clip-segments (-h|--help)
-  $ node weaver.js clip-segments -c=CSV -v=MP4
+  $ weaver clip-segments (-h|--help)
+  $ weaver clip-segments -c=CSV -v=MP4
 
 Examples:
-  $ node weaver.js clip-segments -h
-  $ node weaver.js clip-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
+  $ weaver clip-segments -h
+  $ weaver clip-segments -c=${SEGMENT_FILENAME} -v=${VIDEO_FILENAME}
     `);
   }
 }
@@ -631,12 +631,12 @@ Options:
   -c --config=CSV    provide configuration file
 
 Usages:
-  $ node weaver.js self-test (-h|--help)
-  $ node weaver.js self-test -c=CSV
+  $ weaver self-test (-h|--help)
+  $ weaver self-test -c=CSV
 
 Examples:
-  $ node weaver.js self-test -h
-  $ node weaver.js self-test -c=slides.csv
+  $ weaver self-test -h
+  $ weaver self-test -c=slides.csv
     `);
   }
 }
@@ -682,20 +682,20 @@ Troubleshoot:
   self-test          self-test built-in methods
 
 Usages:
-  $ node weaver.js (-h|--help)
-  $ node weaver.js (-v|--version)
+  $ weaver (-h|--help)
+  $ weaver (-v|--version)
 
 Examples:
-  $ node weaver.js --help
-  $ node weaver.js --clean
-  $ node weaver.js create-videos --help
-  $ node weaver.js unite-videos --help
-  $ node weaver.js split-audio --help
-  $ node weaver.js merge-av --help
-  $ node weaver.js remove-segment --help
-  $ node weaver.js remove-segments --help
-  $ node weaver.js clip-segments --help
-  $ node weaver.js self-test --help
+  $ weaver --help
+  $ weaver --clean
+  $ weaver create-videos --help
+  $ weaver unite-videos --help
+  $ weaver split-audio --help
+  $ weaver merge-av --help
+  $ weaver remove-segment --help
+  $ weaver remove-segments --help
+  $ weaver clip-segments --help
+  $ weaver self-test --help
     `);
   }
 
