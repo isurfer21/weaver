@@ -70,7 +70,7 @@ class AVEnviron {
       process.exit(1);
     }
     const data = fs.readFileSync(fileConfig, 'utf8');
-    const lines = data.split('\n');
+    const lines = data.split(/\r?\n/);
     let columns = lines.shift().split(',');
     let rows = lines.flatMap(row => !!row ? [row.split(',')] : []);
     const config = Sifter.toObjectList(columns, rows);
