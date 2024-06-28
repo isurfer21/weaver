@@ -176,8 +176,8 @@ $ weaver create-video -s=PNG -a=M4A (-t=NUM)
 
 Examples:
 $ weaver create-video -h
-$ weaver create-video -s=slide.png -a=${AUDIOS_FILENAME}
-$ weaver create-video -s=slide.png -a=${AUDIOS_FILENAME} -t=400
+$ weaver create-video -s=slide.png -a=${AUDIO_FILENAME}
+$ weaver create-video -s=slide.png -a=${AUDIO_FILENAME} -t=400
 $ weaver create-video -s=slide.png -t=400
     `);
   }
