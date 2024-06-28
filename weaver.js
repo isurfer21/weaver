@@ -121,6 +121,7 @@ class CreateVideo extends AVEnviron {
         '-c:a', 'copy',
         '-b:a', '192k',
         '-shortest',
+        '-hide_banner',
         fileVideo
       ];
     } else {
@@ -135,6 +136,7 @@ class CreateVideo extends AVEnviron {
         '-r', '25',
         '-f', 'mp4',
         '-c:a', 'copy',
+        '-hide_banner',
         fileVideo
       ];
     }
@@ -211,6 +213,7 @@ class CreateVideos extends AVEnviron {
           '-c:a', 'copy',
           '-b:a', '192k',
           '-shortest',
+          '-hide_banner',
           fileVideo
         ];
       } else {
@@ -225,6 +228,7 @@ class CreateVideos extends AVEnviron {
           '-r', '25',
           '-f', 'mp4',
           '-c:a', 'copy',
+          '-hide_banner',
           fileVideo
         ];
       }
@@ -275,6 +279,7 @@ class UniteVideos extends AVEnviron {
       '-safe', '0',
       '-i', this.fileVideosCatalog,
       '-c', 'copy',
+      '-hide_banner',
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
     spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
@@ -328,6 +333,7 @@ class SplitAudio extends AVEnviron {
         '-ss', timestamps[i - 1] || 0,
         '-to', timestamps[i],
         '-c', 'copy',
+        '-hide_banner',
         path.join(this.dirTemp, `aud-${i + 1}.m4a`)
       ];
       spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
@@ -379,6 +385,7 @@ class MergeAV extends AVEnviron {
       '-map', '1:a',
       '-c:v', 'copy',
       '-c:a', 'copy',
+      '-hide_banner',
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
 
@@ -435,6 +442,7 @@ class RemoveSegment extends AVEnviron {
       '-filter_complex',
       `[0:v]trim=start=${segmentBefore.begin}:end=${segmentBefore.end},setpts=PTS-STARTPTS[v1]; [0:v]trim=start=${segmentAfter.begin}:end=${segmentAfter.end},setpts=PTS-STARTPTS[v2]; [0:a]atrim=start=${segmentBefore.begin}:end=${segmentBefore.end},asetpts=PTS-STARTPTS[a1]; [0:a]atrim=start=${segmentAfter.begin}:end=${segmentAfter.end},asetpts=PTS-STARTPTS[a2]; [v1][a1][v2][a2]concat=n=2:v=1:a=1[out]`,
       '-map', '[out]',
+      '-hide_banner',
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
     spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
@@ -496,6 +504,7 @@ class RemoveSegments extends AVEnviron {
       '-i', fileVideo,
       '-vf', `select='${selectQuery}',setpts=N/FRAME_RATE/TB`,
       '-af', `aselect='${selectQuery}',asetpts=N/SR/TB`,
+      '-hide_banner',
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
 
@@ -549,6 +558,7 @@ class ClipSegments extends AVEnviron {
       '-i', fileVideo,
       '-vf', `select='${selectQuery}',setpts=N/FRAME_RATE/TB`,
       '-af', `aselect='${selectQuery}',asetpts=N/SR/TB`,
+      '-hide_banner',
       path.join(this.dirTemp, OUTPUT_FILENAME)
     ];
     spawnSync('ffmpeg', commandArgs, { stdio: 'inherit' });
